@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.projectparams.lab2.course.article.model.entities.Article;
 import org.projectparams.lab2.course.test.model.entities.Test;
-import org.projectparams.lab2.users.model.Student;
-import org.projectparams.lab2.users.model.Teacher;
+import org.projectparams.lab2.users.model.entities.Student;
+import org.projectparams.lab2.users.model.entities.Teacher;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import org.projectparams.lab2.users.model.Student;
+import org.projectparams.lab2.users.model.entities.Student;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -48,4 +48,9 @@ public class Attempt {
     @Positive
     @Nullable
     Double score;
+
+    @NotNull
+    @Positive
+    @NonNull
+    Integer attemptNumber;
 }

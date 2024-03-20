@@ -5,14 +5,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import org.projectparams.lab2.course.test.exceptions.TestAccessProhibitedException;
-import org.projectparams.lab2.course.test.model.dto.GetAttemptDTO;
 import org.projectparams.lab2.course.test.model.entities.Attempt;
 import org.projectparams.lab2.course.test.model.mapping.AttemptMapper;
 import org.projectparams.lab2.course.test.repository.AttemptRepository;
 import org.projectparams.lab2.course.test.repository.QuestionRepository;
 import org.projectparams.lab2.course.test.repository.TestRepository;
-import org.projectparams.lab2.users.model.Student;
-import org.projectparams.lab2.users.service.UserService;
+import org.projectparams.lab2.users.service.StudentService;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class TestSerivceImpl implements TestService {
 
     @Delegate(types = TestService.class)
     final TestRepository testRepository;
-    final UserService userService;
+    final StudentService studentService;
     final AttemptRepository attemptRepository;
     final TaskScheduler taskScheduler;
     final AttemptMapper attemptMapper;
@@ -38,15 +36,12 @@ public class TestSerivceImpl implements TestService {
 
     @Override
     @Transactional
-    public GetAttemptDTO registerAttempt(String username, Long testId) {
-        var user = userService.findByUsername(username)
+    public void registerAttempt(String username, Long testId) {
+        var student = studentService.findByUsername(username)
                 .orElseThrow(EntityNotFoundException::new);
-        if (!(user instanceof Student)) {
-            throw new TestAccessProhibitedException(testId, username, "User is not a student");
-        }
         var test = testRepository.findById(testId)
                 .orElseThrow(EntityNotFoundException::new);
-        if (!test.getAllowedStudents().contains(user)) {
+        if (!test.getAllowedStudents().contains(student)) {
             throw new TestAccessProhibitedException(testId, username, "User not allowed to take this test");
         }
         var attemptsCount = getStudentAttemptsCount(username, testId);
@@ -56,11 +51,11 @@ public class TestSerivceImpl implements TestService {
         if (attemptRepository.findByClosedIsFalseAndStudent_UsernameAndTest_Id(username, testId).isPresent()) {
             throw new TestAccessProhibitedException(testId, username, "User already has an open attempt");
         }
-        var attempt = new Attempt((Student) user, test);
+        var attempt = new Attempt(student, test, attemptsCount + 1);
         attemptRepository.save(attempt);
         test.getAttempts().add(attempt);
         testRepository.save(test);
-        return attemptMapper.toGetDTO(attempt, attemptsCount + 1);
+        attemptMapper.toGetDTO(attempt);
     }
 
     @Override
@@ -95,6 +90,8 @@ public class TestSerivceImpl implements TestService {
         ).orElseThrow(EntityNotFoundException::new);
         attempt.setDuration((int) (Instant.now().getEpochSecond() -
                 attempt.getStartedAt().atZone(ZoneId.systemDefault()).toEpochSecond()));
+        // TODO: calculate score
+        attempt.setScore(0.0);
         attempt.setClosed(true);
         attemptRepository.save(attempt);
     }
@@ -108,4 +105,5 @@ public class TestSerivceImpl implements TestService {
             attemptRepository.save(attempt);
         }, Instant.now().plusSeconds(attempt.getTest().getTimeLimit()));
     }
+
 }

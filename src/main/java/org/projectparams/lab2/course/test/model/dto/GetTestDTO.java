@@ -1,6 +1,7 @@
 package org.projectparams.lab2.course.test.model.dto;
 
-import org.projectparams.lab2.users.model.dto.GetUserDTO;
+import org.projectparams.lab2.users.model.dto.GetStudentDTO;
+import org.projectparams.lab2.users.model.dto.GetTeacherDTO;
 
 public record GetTestDTO(
         Long id,
@@ -9,8 +10,8 @@ public record GetTestDTO(
         GetQuestionDTO[] questions,
         Integer timeLimit,
         Integer attemptsLimit,
-        GetUserDTO teacher,
-        GetUserDTO[] allowedStudents
+        GetTeacherDTO teacher,
+        GetStudentDTO[] allowedStudents
 
 ) {
 }

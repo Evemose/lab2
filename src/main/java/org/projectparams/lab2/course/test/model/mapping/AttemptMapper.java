@@ -7,7 +7,7 @@ import org.projectparams.lab2.course.test.model.entities.Attempt;
 
 @Mapper(componentModel = "spring")
 public interface AttemptMapper {
-
-    @Mapping(target = "attemptNumber", source = "attemptNumber")
-    GetAttemptDTO toGetDTO(Attempt attempt, int attemptNumber);
+    @Mapping(target = "studentId", expression = "java(attempt.getStudent().getId())")
+    @Mapping(target = "testId", expression = "java(attempt.getTest().getId())")
+    GetAttemptDTO toGetDTO(Attempt attempt);
 }

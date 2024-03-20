@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.projectparams.lab2.course.model.entities.Course;
-import org.projectparams.lab2.users.model.Student;
-import org.projectparams.lab2.users.model.Teacher;
+import org.projectparams.lab2.users.model.entities.Student;
+import org.projectparams.lab2.users.model.entities.Teacher;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +33,7 @@ public class Test {
     Set<Student> allowedStudents = new HashSet<>();
 
     @OneToMany(mappedBy = "test")
+    @ToString.Exclude
     List<Attempt> attempts;
 
     @NotNull
@@ -57,5 +58,6 @@ public class Test {
     @NotNull
     @NonNull
     @ManyToOne
+    @ToString.Exclude
     Course course;
 }

@@ -19,7 +19,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/tests/attempts").hasRole("TEACHER")
+                        authorizeRequests
+                                .requestMatchers("/courses/{id}/students", "/tests/attempts")
+                                .hasRole("TEACHER")
+                                .requestMatchers("/tests/{id}/attempts/**")
+                                .hasRole("STUDENT")
+                                .anyRequest().authenticated()
                 )
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

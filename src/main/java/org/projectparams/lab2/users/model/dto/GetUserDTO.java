@@ -1,7 +1,10 @@
 package org.projectparams.lab2.users.model.dto;
 
-public record GetUserDTO(
-        Long id,
-        String username
-) {
+import lombok.Data;
+
+
+@Data
+public class GetUserDTO {
+    protected final Long id;
+    protected final String username;
 }

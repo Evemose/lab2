@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.ToString;
 import org.projectparams.lab2.course.model.entities.Course;
 
 import java.util.ArrayList;
@@ -24,5 +25,6 @@ public class Article {
     List<Section> sections = new ArrayList<>();
 
     @ManyToOne
+    @ToString.Exclude
     Course course;
 }
