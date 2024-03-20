@@ -13,6 +13,6 @@ import java.util.List;
 @Data
 @Entity
 public class Teacher extends User {
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany
     List<Course> courses = new ArrayList<>();
 }

@@ -1,5 +1,7 @@
 package org.projectparams.lab2.course;
 
+import lombok.RequiredArgsConstructor;
+import org.projectparams.lab2.course.services.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/courses")
+@RequiredArgsConstructor
 public class CourseController {
+    final CourseService courseService;
     @GetMapping("{id}/students")
     public ResponseEntity<?> getStudents(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(courseService.getStudentCourseStats(id));
     }
 }

@@ -18,6 +18,6 @@ public class Student extends User {
     @OneToMany(mappedBy = "student")
     List<Attempt> attempts = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany
     List<Course> courses = new ArrayList<>();
 }
